@@ -2,42 +2,78 @@
 
 [![PyPI version](https://img.shields.io/pypi/v/sdca-rag.svg)](https://pypi.org/project/sdca-rag/)
 [![GitHub release](https://img.shields.io/github/v/release/ashishdhillon/sdca-rag)](https://github.com/ashishdhillon/sdca-rag/releases)
-[![Tests](https://img.shields.io/badge/tests-112%20passed-brightgreen.svg)](https://github.com/ashishdhillon/sdca-rag)
+[![Tests](https://img.shields.io/badge/tests-125%20passed-brightgreen.svg)](https://github.com/ashishdhillon/sdca-rag)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-**Authors:** Subodh Butt & Ashish Dhillon  
-**Degree Track:** MTech Dissertation & Synopsis  
+**Authors:** Subodh Bhatt (MTech CS) & Ashish Dhillon (Assistant Professor)  
+**Institution:** DPG Institute of Technology & Management, Gurugram (Affiliated to MDU Rohtak)  
 
 ---
 
 ## ⚡ Quickstart
 
-Install the official package from PyPI:
+Install the official library from PyPI:
 
 ```bash
 pip install sdca-rag
 ```
 
-### Basic Python Usage:
+### 1. Basic Python Usage:
 
 ```python
 import sdca
 
 # Parse and chunk any PDF using the champion SDCA algorithm:
-chunks = sdca.chunk_document("paper.pdf", target_tokens=300)
+chunks = sdca.chunk_document("annual_report.pdf", target_tokens=300)
 
 for chunk in chunks[:3]:
-    print(f"[{chunk.section}] ({chunk.token_count} tokens):")
+    print(f"[{chunk.metadata.get('section_path_str')}] ({chunk.token_count} tokens):")
     print(chunk.text[:150] + "...\n")
 ```
 
-### LangChain Integration:
+### 2. LangChain Drop-in Integration:
+
+Use `SDCATextSplitter` as a drop-in replacement for LangChain's `RecursiveCharacterTextSplitter`:
 
 ```python
-from sdca import SDCATextSplitter
+from sdca.langchain import SDCATextSplitter
+from langchain_community.document_loaders import PyPDFLoader
 
-splitter = SDCATextSplitter(target_tokens=300)
-chunks = splitter.split_pdf("financial_report.pdf")
+splitter = SDCATextSplitter(target_tokens=300, use_retrieval_text=False)
+
+# Direct PDF ingestion (preserves tables and typography):
+documents = splitter.split_pdf("financial_10k.pdf")
+
+# Or transform existing LangChain Document objects:
+# loader = PyPDFLoader("financial_10k.pdf")
+# documents = splitter.split_documents(loader.load())
+
+for doc in documents[:2]:
+    print("Section Breadcrumbs:", doc.metadata.get("section_path_str"))
+    print("Content Preview:", doc.page_content[:150])
+```
+
+### 3. LlamaIndex Drop-in Integration:
+
+Use `SDCANodeParser` as a drop-in node parser for LlamaIndex RAG pipelines:
+
+```python
+from sdca.llamaindex import SDCANodeParser
+from llama_index.core import SimpleDirectoryReader
+
+parser = SDCANodeParser(target_tokens=300)
+
+# Direct PDF parsing into LlamaIndex TextNodes:
+nodes = parser.parse_pdf("commercial_contract.pdf")
+
+# Or parse LlamaIndex Document collections:
+# documents = SimpleDirectoryReader(input_files=["commercial_contract.pdf"]).load_data()
+# nodes = parser.get_nodes_from_documents(documents)
+
+for node in nodes[:2]:
+    print("Node ID:", node.id_)
+    print("Section Path:", node.metadata.get("section_path_str"))
+    print("Text Preview:", node.text[:150])
 ```
 
 ---
@@ -54,6 +90,17 @@ chunks = splitter.split_pdf("financial_report.pdf")
 * **+10.8% relative gain in Evidence Recall** over standard recursive chunking.
 * **+30.2% gain on Scientific Data & Experiments sections**.
 * **+19.6% gain on factual extractive questions**.
+
+---
+
+## 🏢 Multi-Domain Enterprise Evaluation (SEC Form 10-K & Legal Contracts)
+
+| Metric | LangChain Recursive | Fixed Chunker | Sentence Splitter | **SDCA (STAIR)** | Advantage |
+| :--- | :---: | :---: | :---: | :---: | :--- |
+| **Financial Table Preservation** | 66.7% | 33.3% | 100.0% | **100.0% (3/3 intact)** | Zero severed tables or missing year columns |
+| **Heading Detachment Rate** | 75.0% | 0.0% | 0.0% | **0.0% (Zero detached)** | 100% elimination of stranded headings |
+| **Section Context Retention** | 0.0% | 0.0% | 0.0% | **100.0% (Full breadcrumbs)** | Prepend ancestral section breadcrumbs |
+| **Top-1 Context Completeness** | 62.5% | 75.0% | 75.0% | **87.5%** | **+25.0% boost in answer completeness** |
 
 ---
 

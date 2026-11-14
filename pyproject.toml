@@ -4,16 +4,16 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "sdca-rag"
-version = "0.1.0"
+version = "0.1.1"
 authors = [
-    { name = "Subodh Butt" },
+    { name = "Subodh Bhatt" },
     { name = "Ashish Dhillon" }
 ]
 description = "Structure-Aware Document Chunking Algorithm for Retrieval-Augmented Generation (RAG) Systems"
 readme = "README.md"
 requires-python = ">=3.9"
 license = "MIT"
-keywords = ["rag", "chunking", "llm", "information-retrieval", "document-ai", "pdf-parsing", "stair"]
+keywords = ["rag", "chunking", "llm", "information-retrieval", "document-ai", "pdf-parsing", "stair", "langchain", "llamaindex"]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
@@ -32,6 +32,11 @@ dependencies = [
     "numpy>=1.24.0",
     "pandas>=2.0.0"
 ]
+
+[project.optional-dependencies]
+langchain = ["langchain-core>=0.2.0"]
+llamaindex = ["llama-index-core>=0.10.0"]
+all = ["langchain-core>=0.2.0", "llama-index-core>=0.10.0"]
 
 [tool.setuptools.packages.find]
 where = ["."]
