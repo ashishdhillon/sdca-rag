@@ -1,5 +1,62 @@
 # Structure-Aware Document Chunking Algorithm for Retrieval-Augmented Generation Systems (SDCA)
 
+[![PyPI version](https://img.shields.io/pypi/v/sdca-rag.svg)](https://pypi.org/project/sdca-rag/)
+[![GitHub release](https://img.shields.io/github/v/release/ashishdhillon/sdca-rag)](https://github.com/ashishdhillon/sdca-rag/releases)
+[![Tests](https://img.shields.io/badge/tests-112%20passed-brightgreen.svg)](https://github.com/ashishdhillon/sdca-rag)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+**Authors:** Subodh Butt & Ashish Dhillon  
+**Degree Track:** MTech Dissertation & Synopsis  
+
+---
+
+## ⚡ Quickstart
+
+Install the official package from PyPI:
+
+```bash
+pip install sdca-rag
+```
+
+### Basic Python Usage:
+
+```python
+import sdca
+
+# Parse and chunk any PDF using the champion SDCA algorithm:
+chunks = sdca.chunk_document("paper.pdf", target_tokens=300)
+
+for chunk in chunks[:3]:
+    print(f"[{chunk.section}] ({chunk.token_count} tokens):")
+    print(chunk.text[:150] + "...\n")
+```
+
+### LangChain Integration:
+
+```python
+from sdca import SDCATextSplitter
+
+splitter = SDCATextSplitter(target_tokens=300)
+chunks = splitter.split_pdf("financial_report.pdf")
+```
+
+---
+
+## 📊 Benchmark Summary (Qasper 40-Paper Benchmark, Budget 1,500 Tokens)
+
+| Strategy | Evidence Recall@k | Hit@k | MRR | NDCG@k | Context Tokens |
+| :--- | :---: | :---: | :---: | :---: | :---: |
+| `sentence|hybrid` | 0.5389 | 0.6400 | 0.4680 | 0.4298 | 1283.6 |
+| `recursive|hybrid` (LangChain baseline) | 0.5487 | 0.6560 | 0.4800 | 0.4415 | 1350.5 |
+| `sdca_v2|hybrid` (Previous SDCA) | 0.4919 | 0.6080 | 0.4367 | 0.4178 | 1244.0 |
+| **`sdca_stair|hybrid` (Ours - Champion)** | **0.6081** | **0.7040** | **0.4817** | **0.4739** | **1336.6** |
+
+* **+10.8% relative gain in Evidence Recall** over standard recursive chunking.
+* **+30.2% gain on Scientific Data & Experiments sections**.
+* **+19.6% gain on factual extractive questions**.
+
+---
+
 ## Overview
 This repository implements **SDCA (Structure-Aware Document Chunking Algorithm)**, an M.Tech research project addressing chunk boundary degradation in PDF-based Retrieval-Augmented Generation (RAG) pipelines.
 
