@@ -28,6 +28,9 @@ build/
 dist/
 *.egg-info/
 
+# Scratch
+scratch/
+
 # Large cached benchmark PDFs
 data/qasper/pdfs/
 data/qasper/*.json

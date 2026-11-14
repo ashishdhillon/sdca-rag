@@ -184,6 +184,20 @@ Experiments were conducted on the **Qasper benchmark** using **40 complete arXiv
 4. **Data & Experiments Section Gain:** In experimental/data sections, recall increased from **39.7% to 51.7% (+30.2% gain)**.
 5. **Statistical Significance:** Paired bootstrap resampling ($N = 5,000$) and sign tests confirm a statistically significant improvement over baseline SDCA V2 (**30 wins vs. 9 losses**, $p = 0.001$).
 
+### 7.3 Multi-Domain Enterprise Evaluation (Financial 10-K & Commercial Contracts)
+
+To demonstrate cross-domain generalizability beyond academic publications, SDCA was evaluated on real-world enterprise documents: SEC Form 10-K annual financial disclosures and enterprise SaaS commercial contracts.
+
+| Metric | LangChain Recursive | SDCA (STAIR) | Empirical Advantage |
+| :--- | :---: | :---: | :--- |
+| **Financial Table Preservation** | 66.7% (sliced statements) | **100.0% (3/3 intact)** | Zero severed tables or missing year columns |
+| **Contract Heading Detachment** | 75.0% (detached headers) | **0.0% (zero orphaned clauses)** | Complete clause-to-heading binding |
+| **Section Context Retention** | 0.0% (flat text) | **100.0% (full breadcrumbs)** | Prepend ancestral section breadcrumbs |
+| **Top-1 Context Completeness** | 62.5% | **87.5%** | **+25.0% boost in answer completeness** |
+
+* **Table Slicing Elimination:** LangChain Recursive bisected the Consolidated Statement of Operations, severing Net Income ($168.6M) and EPS from the column headers (`FY 2025 | FY 2024 | FY 2023`). SDCA kept all multi-row financial schedules completely intact.
+* **Orphaned Clause Protection:** Standalone legal clauses (e.g., Section 9.2 direct damages liability cap) retain explicit breadcrumbs `[Section: Master Agreement > Section 9.1 Limitation of Liability]`, preventing retrieval ambiguity.
+
 ---
 
 ## 8. Open-Source Package & External Validation

@@ -46,9 +46,9 @@ CANONICAL_SECTION_TITLES = {
     "acknowledgments",
 }
 
-# Regex pattern for numbered academic headings (e.g., '1. Introduction', '2.1 System Model', 'IV. EVALUATION')
+# Regex pattern for numbered headings across academic, legal, and financial documents
 NUMBERED_HEADING_PATTERN = re.compile(
-    r"^(?:(?:Section|Chapter)\s+\d+[:.]?|(?:\d+\.)+\d*|[IVXLCDM]+\.)\s+[A-Za-z]",
+    r"^(?:(?:Section|Chapter|Article|Item|Note|Schedule|Exhibit)\s+(?:\d+|[IVXLCDM]+)(?:\.\d+)*[:.]?|(?:\d+\.)+\d*|[IVXLCDM]+\.)\s+[A-Za-z]",
     re.IGNORECASE,
 )
 

@@ -113,15 +113,21 @@ class HeadingDetectorV2:
         clean = title.strip()
 
         # Check numbered pattern depth
-        # Match numbered prefixes like '1.', '1.2', '1.2.3'
-        num_match = re.match(r"^((?:\d+\.)+\d*)\s+", clean)
+        # Match numbered prefixes like '1.', '1.2', '1.2.3' or 'Article 4', 'Section 9.2', 'ITEM 7'
+        num_match = re.match(
+            r"^(?:(?:Section|Chapter|Article|Item|Note|Schedule|Exhibit)\s+)?((?:\d+\.)+\d*|\d+|[IVXLCDM]+)\b",
+            clean,
+            re.IGNORECASE,
+        )
         if num_match:
             prefix = num_match.group(1).rstrip(".")
             parts = prefix.split(".")
-            return min(len(parts), 3)
+            if len(parts) > 1:
+                return min(len(parts), 3)
+            return 1
 
         # Roman numerals or 'Section X' -> Level 1
-        if re.match(r"^(?:[IVXLCDM]+\.|(?:Section|Chapter)\s+\d+[:.]?)\s+", clean, re.IGNORECASE):
+        if re.match(r"^(?:[IVXLCDM]+\.|(?:Section|Chapter|Article|Item|Note|Schedule|Exhibit)\s+\d+[:.]?)\s+", clean, re.IGNORECASE):
             return 1
 
         # Canonical section titles are always Level 1

@@ -18,10 +18,17 @@ from src.baselines.tokenization import get_token_counter
 from src.extraction.models import Document
 from src.sdca.v2.chunker import chunk_sdca_v2
 
-# "4", "3.2", "A.1", "I" followed by a space/period and a title.
-_NUM_HEAD = re.compile(r"^\s*((?:\d+|[A-Z])(?:\.\d+)*)[.\s]+(\S.*)$", re.S)
+# Numbered headings across academic, legal, and financial documents:
+# e.g., "4", "3.2", "A.1", "I", "Article 4", "Section 9.2", "ITEM 7", "Note 7"
+_NUM_HEAD = re.compile(
+    r"^\s*(?:(?:Section|Chapter|Article|Item|Note|Schedule|Exhibit)\s+)?((?:\d+|[A-Z]|[IVXLCDM]+)(?:\.\d+)*)[.\s]+(\S.*)$",
+    re.IGNORECASE | re.DOTALL,
+)
 _REF_HEAD = re.compile(r"^\s*(references|bibliography)\b", re.I)
-_FRONT_STOP = re.compile(r"^\s*(abstract|(1|i)[.\s]+\S|introduction)\b", re.I)
+_FRONT_STOP = re.compile(
+    r"^\s*(abstract|(?:1|i)[.\s]+\S|introduction|recitals|preamble|(?:item|article|section)\s+(?:1|i)\b)\b",
+    re.I,
+)
 
 
 @dataclass(frozen=True)
