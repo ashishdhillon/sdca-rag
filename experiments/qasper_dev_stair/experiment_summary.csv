@@ -1,0 +1,6 @@
+strategy,queries,EvRecall@k,Hit@k,MRR,NDCG@k,ctx_tokens,n_chunks
+sentence|hybrid,125,0.5389,0.64,0.468,0.4298,1283.6,3.45
+recursive|hybrid,125,0.5487,0.656,0.48,0.4415,1350.5,3.96
+sdca_v2|hybrid,125,0.4919,0.608,0.4367,0.4178,1244.0,3.43
+sdca_stair_compact|hybrid,125,0.5631,0.664,0.4551,0.4436,1325.1,4.56
+sdca_stair|hybrid,125,0.6081,0.704,0.4817,0.4739,1336.6,4.56
