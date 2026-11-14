@@ -282,10 +282,11 @@ In enterprise RAG, the primary source of hallucination is not model incompetence
 
 As of November 2026:
 - The core SDCA algorithm with STAIR-guided structural enhancements is fully implemented in `src/sdca/v3/chunker.py` and `src/retrieval/hybrid.py`.
-- **117/117 unit tests pass** cleanly with zero failures (`python -m pytest -q tests`).
+- **125/125 unit tests pass** cleanly with zero failures (`python -m pytest -q tests`).
 - **40-Paper Qasper Benchmark Completed:** Verified superiority over LangChain Recursive and Sentence splitters (+19.6% recall on extractive queries, 30 wins / 9 losses, $p=0.001$).
 - **Multi-Domain Enterprise Evaluation Completed:** 100% table preservation and 100% section context retention verified across Financial SEC 10-K and Commercial Legal Contracts (`docs/MULTI_DOMAIN_EVALUATION.md`).
-- **PyPI Library Published:** `pip install sdca-rag==0.1.0` live on the Python Package Index ([https://pypi.org/project/sdca-rag/](https://pypi.org/project/sdca-rag/)).
-- **Public GitHub Repository & Release Live:** Source code, benchmark scripts, and release `v0.1.0` published at [https://github.com/ashishdhillon/sdca-rag](https://github.com/ashishdhillon/sdca-rag).
+- **Framework Integrations (LangChain & LlamaIndex):** Built and validated drop-in `SDCATextSplitter` (LangChain `BaseDocumentTransformer`) and `SDCANodeParser` (LlamaIndex `NodeParser`).
+- **PyPI Library Published:** `pip install sdca-rag==0.1.1` live on the Python Package Index ([https://pypi.org/project/sdca-rag/](https://pypi.org/project/sdca-rag/)).
+- **Public GitHub Repository & Release Live:** Source code, benchmark scripts, and release `v0.1.1` published at [https://github.com/ashishdhillon/sdca-rag](https://github.com/ashishdhillon/sdca-rag).
 - **Interactive Research Lab (Streamlit):** Deployed with side-by-side chunk visualization, Qasper benchmark explorer, and grounded Google Gemini LLM answer generation.
 - **Official MTech Synopsis Finalized:** Word document (`.docx`) and Markdown synopsis formatted to Maharishi Dayanand University (MDU Rohtak) guidelines ready for departmental defense.
